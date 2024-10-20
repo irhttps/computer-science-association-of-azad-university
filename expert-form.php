@@ -1,6 +1,12 @@
 <?php
 
-include_once "core/jdf.php"
+use helper\DB;
+
+require_once(__DIR__ . "/core/Config.php");
+require_once(__DIR__ . "/core/helpers/DB.php");
+include_once "core/jdf.php";
+
+$db = new DB;
 
 ?>
 
@@ -34,11 +40,11 @@ include_once "core/jdf.php"
     <link href="assets/libs/node-waves/node-waves.css" rel="stylesheet"/>
     <link href="assets/libs/nouislider/nouislider.css" rel="stylesheet"/>
     <link href="assets/libs/swiper/swiper.css" rel="stylesheet"/>
-    <link href="assets/libs/animate/animate.min.css" rel="stylesheet"/>
     <link href="assets/libs/select2/select2.css" rel="stylesheet"/>
+    <link href="assets/libs/bootstrap-select/bootstrap-select.css" rel="stylesheet"/>
     <link href="assets/libs/@form-validation/form-validation.css" rel="stylesheet"/>
-
-
+    <link href="assets/libs/animate-css/animate.css" rel="stylesheet"/>
+    <link href="assets/libs/toastr/toastr.css" rel="stylesheet"/>
     <!-- Page CSS -->
     <link href="assets/css/front-page-landing.css" rel="stylesheet"/>
 
@@ -85,7 +91,6 @@ include_once "core/jdf.php"
 
         </div>
 
-
         <div class="alert alert-light mt-3 mb-3" role="alert">
             <p class="lh-2 mb-0 justify-text">
                 این فرم برای عضویت دانشجویان
@@ -96,210 +101,286 @@ include_once "core/jdf.php"
 
         <div class="col-12">
 
-            <h6 class="text-muted mt-5 ps-3 pe-3">لیست کارگروه‌های انجمن</h6>
+            <?php
 
-            <div class="swiper ps-3 pe-3 pb-4" id="swiper-multiple-slides">
+            $groups_f = $db->getExpertGroups();
+            $sub_groups_f = $db->getExpertSubGroups();
 
-                <div class="swiper-wrapper">
+            if ($groups_f["status"] == "OK" && $sub_groups_f["status"] == "OK") {
 
-                    <div class="swiper-slide">
-                        <div class="card h-100 card-expert">
-                            <div class="card-body d-flex justify-content-between align-items-center ">
-                                <div class="card-title mb-0 w-75 d-block">
-                                    <h5 class="mb-2 me-2">هک و امنیت</h5>
-                                    <small class="text-truncate d-block">تست نفوذ ، مهندسی معکوس ، باگ بانتی ، تیم قرمز و آبی</small>
+                $groups = $groups_f["result"];
+                $sub_groups = $sub_groups_f["result"];
+
+                ?>
+
+                <h6 class="text-muted mt-5">لیست کارگروه‌های انجمن</h6>
+
+                <?php if (sizeof($groups) > 0) { ?>
+
+                    <div class="swiper ps-3 pe-3 pb-4" id="swiper-multiple-slides">
+
+                        <div class="swiper-wrapper">
+
+                            <?php
+
+                            foreach ($groups as $group) { ?>
+
+                                <div class="swiper-slide">
+                                    <div class="card h-100 card-expert">
+                                        <div class="card-body d-flex justify-content-between align-items-center ">
+                                            <div class="card-title mb-0 w-75 d-block">
+                                                <h5 class="mb-2 me-2"><?php echo $group["name"] ?></h5>
+                                                <small class="text-truncate d-block"><?php echo $group["desc"] ?></small>
+                                            </div>
+                                            <div class="card-icon">
+                                                <span class="badge bg-label-<?php echo $group["class"] ?> rounded-pill p-3">
+                                                    <i class="ti ti-<?php echo $group["icon"] ?> ti-sm"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="card-icon">
-                                    <span class="badge bg-label-dark rounded-pill p-3">
-                                        <i class="ti ti-shield-lock ti-sm"></i>
-                                    </span>
-                                </div>
-                            </div>
+
+                            <?php } ?>
+
                         </div>
                     </div>
 
-                    <div class="swiper-slide">
-                        <div class="card h-100 card-expert">
-                            <div class="card-body d-flex justify-content-between align-items-center ">
-                                <div class="card-title mb-0 w-75 d-block">
-                                    <h5 class="mb-2 me-2">شبکه</h5>
-                                    <small class="text-truncate d-block">ارتباطات بیسیم ، CCNA ، رایانش ابری ، شبکه‌های بیسیم و سیار</small>
-                                </div>
-                                <div class="card-icon">
-                                    <span class="badge bg-label-warning rounded-pill p-3">
-                                        <i class="ti ti-access-point ti-sm"></i>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
+                <?php } else { ?>
+
+                    <div class="alert alert-info mt-3 mb-3" role="alert">
+                        <p class="lh-2 mb-0 justify-text">
+                            درحال حاضر کارگروهی وجود ندارد . لطفا بعدا بررسی نمایید.
+                        </p>
                     </div>
 
-                    <div class="swiper-slide">
-                        <div class="card h-100 card-expert">
-                            <div class="card-body d-flex justify-content-between align-items-center ">
-                                <div class="card-title mb-0 w-75 d-block">
-                                    <h5 class="mb-2 me-2">هوش مصنوعی</h5>
-                                    <small class="text-truncate d-block">شبکه‌عصبی ، یادگیری ماشین ، یادگیری عمیق ، رباتیک</small>
-                                </div>
-                                <div class="card-icon">
-                                    <span class="badge bg-label-primary rounded-pill p-3">
-                                        <i class="ti ti-brain ti-sm"></i>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <?php } ?>
 
-                    <div class="swiper-slide">
-                        <div class="card h-100 card-expert">
-                            <div class="card-body d-flex justify-content-between align-items-center ">
-                                <div class="card-title mb-0 w-75 d-block">
-                                    <h5 class="mb-2 me-2">توسعه و طراحی وب</h5>
-                                    <small class="text-truncate d-block">فرانت‌اند ، بک‌اند ، وردپرس ، DEVOPS</small>
-                                </div>
-                                <div class="card-icon">
-                                    <span class="badge bg-label-info rounded-pill p-3">
-                                        <i class="ti ti-world-www ti-sm"></i>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            <?php } else { ?>
 
-                    <div class="swiper-slide">
-                        <div class="card h-100 card-expert">
-                            <div class="card-body d-flex justify-content-between align-items-center ">
-                                <div class="card-title mb-0 w-75 d-block">
-                                    <h5 class="mb-2 me-2">بازی سازی</h5>
-                                    <small class="text-truncate d-block">بازی‌های 2D ، 3D ، آنریل‌انجین ، یونیتی</small>
-                                </div>
-                                <div class="card-icon">
-                                    <span class="badge bg-label-danger rounded-pill p-3">
-                                        <i class="ti ti-device-gamepad ti-sm"></i>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="swiper-slide">
-                        <div class="card h-100 card-expert">
-                            <div class="card-body d-flex justify-content-between align-items-center ">
-                                <div class="card-title mb-0 w-75 d-block">
-                                    <h5 class="mb-2 me-2">برنامه نویس موبایل</h5>
-                                    <small class="text-truncate d-block">اپلیکیشن اندروید ، IOS ، کراس پلتفرم (فلاتر)</small>
-                                </div>
-                                <div class="card-icon">
-                                    <span class="badge bg-label-success rounded-pill p-3">
-                                        <i class="ti ti-device-mobile ti-sm"></i>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="swiper-slide">
-                        <div class="card h-100 card-expert">
-                            <div class="card-body d-flex justify-content-between align-items-center ">
-                                <div class="card-title mb-0 w-75 d-block">
-                                    <h5 class="mb-2 me-2">UI/UX</h5>
-                                    <small class="text-truncate d-block">طراحی رابط و تجربه کاربری سایت و اپلیکیشن</small>
-                                </div>
-                                <div class="card-icon">
-                                    <span class="badge bg-label-google-plus rounded-pill p-3">
-                                        <i class="ti ti-wand ti-sm"></i>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="swiper-slide">
-                        <div class="card h-100 card-expert">
-                            <div class="card-body d-flex justify-content-between align-items-center ">
-                                <div class="card-title mb-0 w-75 d-block">
-                                    <h5 class="mb-2 me-2">سخت افزار</h5>
-                                    <small class="text-truncate d-block">سیستم‌های کامپیوتری ، تعمیر ، عیب یابی ، تعویض</small>
-                                </div>
-                                <div class="card-icon">
-                                    <span class="badge bg-label-facebook rounded-pill p-3">
-                                        <i class="ti ti-cpu ti-sm"></i>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
+                <div class="alert alert-danger mt-3 mb-3" role="alert">
+                    <p class="lh-2 mb-0 justify-text">
+                        خطایی در دریافت لیست کارگروه‌ها وجود دارد ، به زودی توسط توسعه دهنده برطرف خواهد شد.
+                    </p>
                 </div>
+
+            <?php } ?>
+
+            <div class="card mt-3" id="card-block">
+                <form id="form">
+                    <h5 class="card-header">فرم عضویت</h5>
+                    <div class="card-body" >
+
+                        <hr class="mt-0">
+
+
+                        <div class="row g-3 mt-3">
+
+                            <div class="col-md-5">
+
+                                <div class="mb-4 row mt-md-3">
+                                    <label class="col-md-5 col-form-label" for="full_name">نام شما</label>
+                                    <div class="col-md-7">
+                                        <input class="form-control" id="full_name" name="full_name" placeholder="فارسی تایپ کنید" type="text"/>
+                                    </div>
+                                </div>
+
+                                <div class="mb-4 row mt-md-5">
+                                    <label class="col-md-5 col-form-label" for="mobile">شماره موبایل</label>
+                                    <div class="col-md-7">
+                                        <input class="form-control ltr" id="mobile" name="mobile" placeholder="" type="text"/>
+                                    </div>
+                                </div>
+
+                                <div class="mb-4 row mt-md-5">
+                                    <label class="col-md-5 col-form-label" for="select_year">سال ورود</label>
+                                    <div class="col-md-7">
+                                        <select class="form-select select2" data-allow-clear="true" id="select_year" name="select_year">
+                                            <option value="">انتخاب کنید</option>
+                                            <?php
+                                            $current_year = jdate('Y', time());
+                                            for ($y = $current_year; $y >= $current_year - 8; $y--) {
+                                                print_r("<option value='$y'>$y</option>");
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="mb-4 row mt-md-5">
+                                    <label class="col-md-5 col-form-label" for="select_year_half">نیمسال ورود</label>
+                                    <div class="col-md-7">
+                                        <select class="form-select select2" data-allow-clear="true" id="select_year_half" name="select_year_half">
+                                            <option value="">انتخاب کنید</option>
+                                            <option value='0'>نیمسال اول (ورودی مهر)</option>
+                                            <option value='1'>نیمسال دوم (ورودی بهمن)</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-1"></div>
+
+                            <div class="col-md-6">
+
+                                <?php if ($groups_f["status"] == "OK") { ?>
+
+                                    <div class="mb-4 row mt-md-3">
+                                        <label class="col-md-5 col-form-label" for="select_group">کارگروه مورد نظر</label>
+                                        <div class="col-md-7">
+
+                                            <?php if (sizeof($groups) > 0) { ?>
+
+                                                <select class="select2-icons form-select" id="select_group" name="select_group" data-allow-clear="true">
+
+                                                    <?php foreach ($groups as $group) { ?>
+
+                                                        <option data-icon="ti ti-<?php echo $group["icon"] ?>" value="<?php echo $group["key"] ?>"><?php echo $group["name"] ?></option>
+
+                                                    <?php } ?>
+
+                                                </select>
+
+                                            <?php } else { ?>
+
+                                                <div class="alert alert-info mt-3 mb-3" role="alert">
+                                                    <p class="lh-2 mb-0 justify-text">
+                                                        درحال حاضر کارگروهی وجود ندارد ُ لطفا بعدا بررسی نمایید.
+                                                    </p>
+                                                </div>
+
+                                            <?php } ?>
+
+                                        </div>
+
+                                    </div>
+
+                                <?php } else { ?>
+
+                                    <div class="alert alert-danger mt-md-5 mb-3" role="alert">
+                                        <p class="lh-2 mb-0 justify-text">
+                                            خطایی در دریافت لیست کارگروه‌ها وجود دارد ، به زودی توسط توسعه دهنده برطرف خواهد شد.
+                                        </p>
+                                    </div>
+
+                                <?php } ?>
+
+
+                                <?php
+
+                                if ($sub_groups_f["status"] == "OK") {
+
+                                    ?>
+
+                                    <div class="mb-4 row mt-md-5">
+                                        <label class="col-md-5 col-form-label" for="select_favorites">حوزه‌های مورد علاقه من</label>
+                                        <div class="col-md-7">
+
+                                            <?php if (sizeof($sub_groups) > 0) { ?>
+
+                                                <select class="selectpicker w-100" data-style="btn-default" id="select_favorites" name="select_favorites[]" data-show-subtext="true" data-live-search="true" multiple>
+
+                                                    <?php
+
+                                                    $isGroup = false;
+
+                                                    foreach ($sub_groups as $sub_group) {
+
+                                                        if ($sub_group["type"] == "group") {
+
+                                                            if ($isGroup)
+                                                                print_r("</optgroup>");
+
+                                                            print_r("<optgroup label='{$sub_group["name"]}'>");
+                                                            $isGroup = true;
+
+                                                        } else {
+
+                                                            print_r("<option value='{$sub_group["id"]}' data-subtext='{$sub_group["name_en"]}'>{$sub_group["name"]}</option>");
+
+                                                        }
+
+                                                    } ?>
+
+                                                </select>
+
+                                            <?php } else { ?>
+
+                                                <div class="alert alert-info mt-3 mb-3" role="alert">
+                                                    <p class="lh-2 mb-0 justify-text">
+                                                        درحال حاضر حوزه‌ای در سیستم وجود ندارد ، به زودی افزوده خواهد شد.
+                                                    </p>
+                                                </div>
+
+                                            <?php } ?>
+
+                                        </div>
+
+                                    </div>
+
+                                <?php } else { ?>
+
+                                    <div class="alert alert-danger mt-md-5 mb-3" role="alert">
+                                        <p class="lh-2 mb-0 justify-text">
+                                            خطایی در دریافت لیست حوزه‌ها وجود دارد ، به زودی توسط توسعه دهنده برطرف خواهد شد.
+                                        </p>
+                                    </div>
+
+                                <?php } ?>
+
+                                <div class="mb-4 row mt-md-5">
+                                    <label class="w-auto col-form-label" for="isWorked">آیا تجربه‌کار در حوزه‌های کامپیوتر را داشتید؟</label>
+                                    <div class="w-auto align-content-center">
+                                        <input class="form-check-input" type="checkbox" value="" id="isWorked" name="isWorked"/>
+                                    </div>
+                                </div>
+
+                                <div class="mb-4 row mt-md-5">
+                                    <label class="w-auto col-form-label" for="isOk">آیا علاقه مند به همکاری در انجمن هستید؟</label>
+                                    <div class="w-auto align-content-center">
+                                        <input class="form-check-input" type="checkbox" value="" id="isOk" name="isOk"/>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="card-footer d-flex justify-content-end">
+                        <input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response">
+                        <input type="hidden" name="action" value="validate_captcha">
+                        <button type="submit" class="btn btn-primary waves-effect waves-light m-1">ارسال فرم</button>
+                    </div>
+                </form>
             </div>
 
-
-            <div class="card mt-3">
-                <h5 class="card-header">فرم عضویت</h5>
-                <div class="card-body">
-
-                    <hr class="mt-0">
-
-                    <form class="row g-3 mt-3" id="form">
-
-                        <div class="col-md-6">
-
-                            <div class="mb-4 row">
-                                <label class="col-md-4 col-form-label" for="html5-text-input">نام و نام خانوادگی</label>
-                                <div class="col-md-8">
-                                    <input class="form-control" id="formValidationName" name="formValidationName" placeholder="فارسی تایپ کنید" type="text"/>
-                                </div>
-                            </div>
-
-                            <div class="mb-4 row">
-                                <label class="col-md-4 col-form-label" for="html5-text-input">شماره موبایل</label>
-                                <div class="col-md-8">
-                                    <input class="form-control ltr" id="formValidationName" name="formValidationName" placeholder="" type="text"/>
-                                </div>
-                            </div>
-
-                            <div class="mb-4 row">
-                                <label class="col-md-4 col-form-label" for="html5-text-input">سال ورود</label>
-                                <div class="col-md-8">
-                                    <select class="form-select select2" data-allow-clear="true" id="select-year" name="select-year">
-                                        <option value="">انتخاب کنید</option>
-                                        <?php
-                                        $current_year = jdate('Y', time());
-                                        for ($y = $current_year; $y >= $current_year - 8; $y--) {
-                                            print_r("<option value='$y'>$y</option>");
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="mb-4 row">
-                                <label class="col-md-4 col-form-label" for="html5-text-input">نیمسال ورود</label>
-                                <div class="col-md-8">
-                                    <select class="form-select select2" data-allow-clear="true" id="select-year-half" name="select-year-half">
-                                        <option value="">انتخاب کنید</option>
-                                        <option value='0'>نیمسال اول (ورودی مهر)</option>
-                                        <option value='1'>نیمسال دوم (ورودی بهمن)</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <div class="col-md-6">
-                            <label class="form-label" for="formValidationName">نام و نام خانوادگی</label>
-                            <input class="form-control" id="formValidationName" name="formValidationName" placeholder="نـوید" type="text"/>
-                        </div>
-
-
-                    </form>
-                </div>
-            </div>
         </div>
 
-        <div class="divider divider-dashed">
-            <div class="divider-text">فرم عضویت</div>
+        <div class="col-12 row my-4 d-flex justify-content-center">
+            <a type="button" class="btn rounded-pill btn-twitter waves-effect waves-light w-auto mx-2 my-1" href="https://telegram.me/iauk_computer">
+                <i class="tf-icons ti ti-brand-telegram ti-xs me-2"></i>
+                کانال تلگرام
+            </a>
+
+            <a type="button" class="btn rounded-pill btn-warning waves-effect waves-light w-auto mx-2 my-1" href="https://telegram.me/iauk_computer">
+                <i class="tf-icons ti ti-cast ti-xs me-2"></i>
+                پادکست TechTopia
+            </a>
+
+            <a type="button" class="btn rounded-pill btn-info waves-effect waves-light w-auto mx-2 my-1" href="https://t.me/+_S5o8onOeUU3ZTE0">
+                <i class="tf-icons ti ti-align-box-left-middle ti-xs me-2"></i>
+                گروه تلگرام
+            </a>
+
+            <a type="button" class="btn rounded-pill btn-instagram waves-effect waves-light w-auto mx-2 my-1" href="https://www.instagram.com/iauk_computer/">
+                <i class="tf-icons ti ti-brand-instagram ti-xs me-2"></i>
+                صفحه اینستاگرام
+            </a>
+
         </div>
+
     </div>
 
 </div>
@@ -317,7 +398,7 @@ include_once "core/jdf.php"
                 </span>
             </div>
             <div class="mobile-hidden">
-                طراحی شده با 💜 توسط اجزاء ویکسی
+                Copyright © 2024 IUK. All rights reserved
             </div>
         </div>
     </div>
@@ -328,6 +409,19 @@ include_once "core/jdf.php"
 <div class="mouse mouse-outer"></div>
 <div class="mouse mouse-inner"></div>
 <!-- mouse pointer: End -->
+
+<!-- toast error : Start -->
+<div aria-atomic="true" aria-live="assertive" class="bs-toast toast-error toast toast-placement-ex m-2 fade top-50 start-50 translate-middle translate-middle-x animate__animated my-2" data-bs-delay="3000" role="alert">
+    <div class="toast-header">
+        <i class="ti ti-bell ti-xs me-2 text-danger"></i>
+        <div class="me-auto fw-medium">خطای ارتباط با سرور</div>
+        <button aria-label="بستن" class="btn-close" data-bs-dismiss="toast" type="button"></button>
+    </div>
+    <div class="toast-body">متاسفانه مشکلی در اتصال به سرور وجود دارد ، اینترنت را بررسی کنید.</div>
+</div>
+<!-- toast error : End -->
+
+<div class="d-none" id="ajaxResult"></div>
 
 <!-- build:js -->
 <script src="assets/libs/jquery/jquery.js"></script>
@@ -342,18 +436,24 @@ include_once "core/jdf.php"
 <!-- Vendors JS -->
 <script src="assets/libs/nouislider/nouislider.js"></script>
 <script src="assets/libs/swiper/swiper.js"></script>
-<script src="assets/libs/wow/wow.min.js"></script>
 <script src="assets/libs/select2/select2.js"></script>
 <script src="assets/libs/select2/i18n/fa.js"></script>
+<script src="assets/libs/bootstrap-select/bootstrap-select.js"></script>
+<script src="assets/libs/bootstrap-select/i18n/defaults-fa_IR.js"></script>
 <script src="assets/libs/@form-validation/popular.js"></script>
 <script src="assets/libs/@form-validation/bootstrap5.js"></script>
-<script src=assets/libs/@form-validation/auto-focus.js"></script>
-<script src="assets/libs/jdate/jdate.js"></script>
-
-<!-- Main JS -->
-<script src="assets/js/front-main.js"></script>
+<script src="assets/libs/@form-validation/auto-focus.js"></script>
+<script src="assets/libs/block-ui/block-ui.js"></script>
+<script src="assets/libs/toastr/toastr.js"></script>
 
 <!-- Page JS -->
-<script src="assets/js/front-page-landing.js"></script>
+<script src="assets/js/front-main.js"></script>
+<script src="https://www.google.com/recaptcha/api.js?render=6LetlWYqAAAAAN08D8T4XGfDZ4BJ3-wBO_Gx9Mal"></script>
+
+<script>
+
+    var baseurl = "http://127.0.0.1/projects/univercity/Register Form/";
+
+</script>
 
 </body>
