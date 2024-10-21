@@ -394,7 +394,7 @@ $db = new DB;
                     طراحی و توسعه توسط
                     <span class="text-danger byte-hover">بایت ‌مَستر</span>
                     دریافت سورس کد در
-                    <a class="fw-medium" href="#support" target="_blank">گیتهاب</a>
+                    <a class="fw-medium" href="https://github.com/irhttps/computer-science-association-of-azad-university" target="_blank">گیتهاب</a>
                 </span>
             </div>
             <div class="mobile-hidden">
